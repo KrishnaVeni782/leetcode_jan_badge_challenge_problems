@@ -1,0 +1,34 @@
+Minimum Number of Operations to Move All Balls to Each Box
+
+code:
+
+class Solution {
+    public int[] minOperations(String boxes) {
+        int n = boxes.length();
+        int[] answer = new int[n];
+
+        // Left-to-right pass
+        int count = 0; // Number of balls encountered so far
+        int operations = 0; // Total operations to move balls to the current index
+        for (int i = 0; i < n; i++) {
+            answer[i] = operations;
+            if (boxes.charAt(i) == '1') {
+                count++;
+            }
+            operations += count;
+        }
+
+        // Right-to-left pass
+        count = 0;
+        operations = 0;
+        for (int i = n - 1; i >= 0; i--) {
+            answer[i] += operations;
+            if (boxes.charAt(i) == '1') {
+                count++;
+            }
+            operations += count;
+        }
+
+        return answer;
+    }
+}
