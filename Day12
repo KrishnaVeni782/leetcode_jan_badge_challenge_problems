@@ -1,0 +1,54 @@
+Check if a Parentheses String Can Be Valid
+
+code:
+class Solution {
+    public boolean canBeValid(String s, String locked) {
+          int n = s.length();
+
+        // If the length of the string is odd, it cannot be valid
+        if (n % 2 != 0) return false;
+
+        // First pass: Check balance from left to right
+        int open = 0; // Count of open brackets
+        int free = 0; // Count of free positions
+
+        for (int i = 0; i < n; i++) {
+            if (locked.charAt(i) == '0') {
+                free++; // Free position, can be either '(' or ')'
+            } else if (s.charAt(i) == '(') {
+                open++; // Locked open bracket
+            } else {
+                if (open > 0) {
+                    open--; // Match locked open bracket with this closed bracket
+                } else if (free > 0) {
+                    free--; // Use a free position to match this closed bracket
+                } else {
+                    return false; // Not enough resources to match this closed bracket
+                }
+            }
+        }
+
+        // Second pass: Check balance from right to left
+        int close = 0; // Count of close brackets
+        free = 0; // Reset free count
+
+        for (int i = n - 1; i >= 0; i--) {
+            if (locked.charAt(i) == '0') {
+                free++; // Free position, can be either '(' or ')'
+            } else if (s.charAt(i) == ')') {
+                close++; // Locked closed bracket
+            } else {
+                if (close > 0) {
+                    close--; // Match locked closed bracket with this open bracket
+                } else if (free > 0) {
+                    free--; // Use a free position to match this open bracket
+                } else {
+                    return false; // Not enough resources to match this open bracket
+                }
+            }
+        }
+
+        return true;
+        
+    }
+}
