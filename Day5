@@ -1,0 +1,47 @@
+Shifting Letters II   
+
+code:
+
+class Solution {
+    public String shiftingLetters(String s, int[][] shifts) {
+        int n = s.length();
+        int[] shiftArray = new int[n + 1]; // Create an auxiliary array for cumulative shifts
+
+        // Apply shifts using the range-based increment technique
+        for (int[] shift : shifts) {
+            int start = shift[0];
+            int end = shift[1];
+            int direction = shift[2];
+
+            // Increment or decrement based on the direction
+            if (direction == 1) {
+                shiftArray[start] += 1;
+                shiftArray[end + 1] -= 1;
+            } else {
+                shiftArray[start] -= 1;
+                shiftArray[end + 1] += 1;
+            }
+        }
+
+        // Compute the prefix sum to determine the net shifts at each position
+        int[] netShifts = new int[n];
+        int cumulativeShift = 0;
+        for (int i = 0; i < n; i++) {
+            cumulativeShift += shiftArray[i];
+            netShifts[i] = cumulativeShift;
+        }
+
+        // Apply the net shifts to the string
+        char[] result = s.toCharArray();
+        for (int i = 0; i < n; i++) {
+            int originalIndex = result[i] - 'a';
+            int newIndex = (originalIndex + netShifts[i]) % 26;
+            if (newIndex < 0) {
+                newIndex += 26; // Handle negative indices for backward shifts
+            }
+            result[i] = (char) ('a' + newIndex);
+        }
+
+        return new String(result);
+    }
+}
